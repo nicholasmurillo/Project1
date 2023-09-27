@@ -1,11 +1,13 @@
 #include <iostream>
+#include <string>
 #include <vector>
 #include <cmath>
 #include <exception>
+#include "../src/parsing.h"
 
 struct TreeNode {
     int height;
-    int id;
+    std::string id;
     std::string name;
     TreeNode* left = nullptr;
     TreeNode* right = nullptr;
@@ -17,7 +19,7 @@ struct TreeNode {
     {
         this->left = root;
     }
-    TreeNode(int id, std::string name) 
+    TreeNode(std::string id, std::string name) 
     {
         this->id = id;
         this->name = name;
@@ -28,34 +30,34 @@ struct MyAVLTree {
     int height = 0;
     TreeNode* root = nullptr;
     // TODO: BALANCE TREE FUNC
-    TreeNode* insert(TreeNode* root, std::string name, int id) 
+    // Insert function, called once
+    void insert(std::string name, std::string id)
+    {
+        if(!checkName(name) or !checkID(id)) // Checking if name and id are valid
+            {
+                std::cout << "unsucessful" << std::endl;
+                return;
+            }
+        insertHelper(this->root, name, id);
+    }
+    // Insert Helper Function, recursively called
+    TreeNode* insertHelper(TreeNode* root, std::string name, std::string id) 
     {
         try
         {
-            for(auto c : name) // Checking for characters a-z, A-Z, or space
-            {
-                if(not (isalpha(c) or c == ' '))
-                {
-                    throw nullptr;
-                }
-            }
-            if(trunc(log10(id)) + 1 != 8) // Checking if id is 8 numbers long
-            {
-                throw nullptr;
-            }
             if(root == nullptr)
             {
                 std::cout << "successful insert" << std::endl;
                 root = new TreeNode(id, name);
                 return root;
             }
-            if(id < root->id)
+            if(std::stoi(id) < std::stoi(root->id))
             {
-                root->setLeft(insert(root->left, name, id));
+                root->setLeft(insertHelper(root->left, name, id));
             }
-            else if(id > root->id)
+            else if(std::stoi(id) > std::stoi(root->id))
             {
-                root->setRight(insert(root->right, name, id));
+                root->setRight(insertHelper(root->right, name, id));
             }
             else // If id == root->id, id is a duplicate and is an unsuccessful insert
             {
@@ -67,11 +69,11 @@ struct MyAVLTree {
         catch(...)
         {
             std::cout << "unsuccessful" << std::endl;
+            return nullptr;
         }
-        
     }
     // TODO: REMOVE ID, PRIORITIZE IN ORDER SUCCESSOR (ONE RIGHT, THEN FURTHEST LEFT)
-    TreeNode* remove(TreeNode* root, int id) 
+    TreeNode* remove(TreeNode* root, std::string id) 
     {
         try
         {
@@ -79,27 +81,14 @@ struct MyAVLTree {
             {
                 throw nullptr;
             }
-            else if(id < root->id)
-            {
-                remove(root->left, id);
-            }
-            else if(id > root->id)
-            {
-                remove(root->right, id);
-            }
-            else
-            {
-                
-            }
         }
         catch(...)
         {
             std::cout << "unsucessful" << std::endl;
         }
-        
     }
     // searchID
-    void searchID(TreeNode* root, int id) 
+    void searchID(TreeNode* root, std::string id) 
     {
         try
         {
@@ -107,11 +96,11 @@ struct MyAVLTree {
             {
                 throw nullptr;
             }
-            if(root->id == id)
+            if(std::stoi(id) == std::stoi(root->id))
             {
                 std::cout << root->name << std::endl;
             }
-            else if(id < root->id)
+            else if(std::stoi(id) < std::stoi(root->id))
             {
                 searchID(root->left, id);
             }
@@ -277,8 +266,8 @@ struct MyAVLTree {
         }
     }
     // TODO: REMOVE IN ORDER NODE  
-    MyAVLTree(TreeNode* root, std::string name, int id) {
-        this->root = insert(root, name, id);
+    MyAVLTree(std::string name, std::string id) {
+        this->root = insertHelper(this->root, name, id);
         this->height++;
     }
 };
