@@ -1,0 +1,5 @@
+if(EXISTS "C:/Nicholas/UF/VSCode/C++/DSA/Projects/Project1/build/Tests_tests-b12d07c.cmake")
+  include("C:/Nicholas/UF/VSCode/C++/DSA/Projects/Project1/build/Tests_tests-b12d07c.cmake")
+else()
+  add_test(Tests_NOT_BUILT-b12d07c Tests_NOT_BUILT-b12d07c)
+endif()
