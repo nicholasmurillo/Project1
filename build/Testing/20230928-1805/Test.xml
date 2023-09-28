@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="Win32-mingw32-make"
+	BuildStamp="20230928-1805-Experimental"
+	Name="DESKTOP-C0V8BJN"
+	Generator="ctest-3.27.2"
+	CompilerName="C:/mingw64/bin/g++.exe"
+	CompilerVersion="13.2.0"
+	OSName="Windows"
+	Hostname="DESKTOP-C0V8BJN"
+	OSRelease=" Professional"
+	OSVersion=" (Build 9200)"
+	OSPlatform="AMD64"
+	Is64Bits="1"
+	VendorString=""
+	VendorID="Unknown Manufacturer"
+	FamilyID="0"
+	ModelID="0"
+	ProcessorCacheSize="0"
+	NumberOfLogicalCPU="8"
+	NumberOfPhysicalCPU="4"
+	TotalVirtualMemory="37338"
+	TotalPhysicalMemory="32474"
+	LogicalProcessorsPerPhysical="2"
+	ProcessorClockFrequency="2803"
+	>
+	<Testing>
+		<StartDateTime>Sep 28 15:30 Eastern Daylight Time</StartDateTime>
+		<StartTestTime>1695929410</StartTestTime>
+		<TestList/>
+		<EndDateTime>Sep 28 15:30 Eastern Daylight Time</EndDateTime>
+		<EndTestTime>1695929410</EndTestTime>
+		<ElapsedMinutes>0</ElapsedMinutes>
+	</Testing>
+</Site>

@@ -7,9 +7,15 @@
 */
 
 int main(){
-	MyAVLTree tree("Nicholas", "55182448");
-	tree.insert("prof", "00001234");
-	tree.insert("bruh", "00123420");
+	MyAVLTree tree("Nicholas", "00000008");
+	tree.insert("prof", "00000006");
+	tree.insert("bruh", "00000001");
+	tree.insert("matt", "99999999");
+	tree.insert("pog", "99999998");
+	std::cout << tree.successorNode(tree.root->right)->id << std::endl;
+	std::cout << tree.root->height << std::endl;
+	std::cout << tree.root->left->height << std::endl;
+	std::cout << tree.root->right->height << std::endl;
 	return 0;
 }
 

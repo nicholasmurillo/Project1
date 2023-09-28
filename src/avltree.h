@@ -6,7 +6,7 @@
 #include "../src/parsing.h"
 
 struct TreeNode {
-    int height;
+    int height = 1;
     std::string id;
     std::string name;
     TreeNode* left = nullptr;
@@ -19,7 +19,7 @@ struct TreeNode {
     {
         this->left = root;
     }
-    TreeNode(std::string id, std::string name) 
+    TreeNode(std::string name, std::string id) 
     {
         this->id = id;
         this->name = name;
@@ -27,9 +27,52 @@ struct TreeNode {
 };
 
 struct MyAVLTree {
-    int height = 0;
+    int height = 1;
     TreeNode* root = nullptr;
-    // TODO: BALANCE TREE FUNC
+    // Balance Factor Function
+    int balFactor(TreeNode* root)
+    {
+        if(root == nullptr)
+        {
+            return 0;
+        }
+        else
+        {
+            int left_height = root->left ? root->left->height : 0;
+            int right_height = root->right ? root->right->height : 0;
+            return left_height - right_height;
+        }
+    }
+    // Left Rotation
+    TreeNode* leftRotate(TreeNode* root)
+    {
+        TreeNode* rightchild = root->right;
+        TreeNode* childleft = rightchild->left;
+        rightchild->left = root;
+        root->right = childleft;
+        root->height = 1 + std::max(root->left ? root->left->height : 0, root->right ? root->right->height : 0);
+        rightchild->height = 1 + std::max(rightchild->left ? rightchild->left->height : 0, rightchild->right ? rightchild->right->height : 0);
+        if(root == this->root)
+        {
+            this->root = rightchild;
+        }
+        return rightchild;
+    }
+    // Right Rotation
+    TreeNode* rightRotate(TreeNode* root)
+    {
+        TreeNode* leftchild = root->left;
+        TreeNode* childright = leftchild->right;
+        leftchild->right = root;
+        root->left = childright;
+        root->height = 1 + std::max(root->left ? root->left->height : 0, root->right ? root->right->height : 0);
+        leftchild->height = 1 + std::max(leftchild->left ? leftchild->left->height : 0, leftchild->right ? leftchild->right->height : 0);
+        if(root == this->root)
+        {
+            this->root = leftchild;
+        }
+        return leftchild;
+    }
     // Insert function, called once
     void insert(std::string name, std::string id)
     {
@@ -43,49 +86,101 @@ struct MyAVLTree {
     // Insert Helper Function, recursively called
     TreeNode* insertHelper(TreeNode* root, std::string name, std::string id) 
     {
-        try
+        if(root == nullptr)
         {
-            if(root == nullptr)
-            {
-                std::cout << "successful insert" << std::endl;
-                root = new TreeNode(id, name);
-                return root;
-            }
-            if(std::stoi(id) < std::stoi(root->id))
-            {
-                root->setLeft(insertHelper(root->left, name, id));
-            }
-            else if(std::stoi(id) > std::stoi(root->id))
-            {
-                root->setRight(insertHelper(root->right, name, id));
-            }
-            else // If id == root->id, id is a duplicate and is an unsuccessful insert
-            {
-                throw nullptr;
-            }
-            // TODO: INSERT BALANCE FUNCTION HERE
+            return new TreeNode(name, id);
+        }
+        if(std::stoi(id) < std::stoi(root->id))
+        {
+            root->left = insertHelper(root->left, name, id);
+        }
+        else if(std::stoi(id) > std::stoi(root->id))
+        {
+            root->right = insertHelper(root->right, name, id);
+        }
+        else
+        {
             return root;
         }
-        catch(...)
+        // Updating heights after insertion
+        root->height = 1 + std::max(root->left ? root->left->height : 0, root->right ? root->right->height : 0);
+        // After updating heights, check all balance factors of affected nodes
+        int balance = balFactor(root);
+        // TODO: Balance using the balance factor info
+        return root;
+    }
+    // Remove ID Function, Prioritizes In Order Successor
+    void remove(std::string id) 
+    {
+        removeHelper(this->root, id);
+        return;
+    }
+    // Successor Node Finder Function
+    TreeNode* successorNode(TreeNode* node)
+    {
+        if(node->left == nullptr)
         {
-            std::cout << "unsuccessful" << std::endl;
-            return nullptr;
+            return node;
+        }
+        else
+        {
+            return successorNode(node->left);
         }
     }
-    // TODO: REMOVE ID, PRIORITIZE IN ORDER SUCCESSOR (ONE RIGHT, THEN FURTHEST LEFT)
-    TreeNode* remove(TreeNode* root, std::string id) 
+    // Remove ID Helper Function
+    TreeNode* removeHelper(TreeNode* root, std::string id)
     {
-        try
+        // If root is nullptr, id is not in tree
+        if(root == nullptr)
         {
+            return root;
+        }
+        // Id is less than root id, recurse through left node
+        if(std::stoi(id) < std::stoi(root->id))
+        {
+            root->left = removeHelper(root->left, id);
+        }
+        // Id is more than root id, recurse through right node
+        else if(std::stoi(id) > std::stoi(root->id))
+        {
+            root->right = removeHelper(root->right, id);
+        }
+        else
+        {
+            // If has any nullptr children, no children or one child case
+            if(root->left == nullptr or root->right == nullptr)
+            {
+                TreeNode* temp = root->left ? root->left : root->right;
+                // No Children Case if root->left and root->right are nullptr
+                if(temp == nullptr)
+                {
+                    temp = root;
+                    root = nullptr;
+                }
+                else
+                {
+                    // Dereferenced node contents of temp copied into root
+                    *root = *temp;
+                    delete temp;
+                }
+            }
+            // Two Children Case
+            else
+            {
+                TreeNode* temp = successorNode(root->right);
+                root->id = temp->id;
+                root->name = temp->name;
+                root->right = removeHelper(root->right, temp->id);
+            }
+            // If TreeNode was only one in tree, return before changing height
             if(root == nullptr)
             {
-                throw nullptr;
+                return root;
             }
+            // Updating heights of nodes after deletion
+            root->height = 1 + std::max(root->left ? root->left->height : 0, root->right ? root->right->height : 0);
         }
-        catch(...)
-        {
-            std::cout << "unsucessful" << std::endl;
-        }
+        return root;
     }
     // searchID
     void searchID(TreeNode* root, std::string id) 
@@ -113,8 +208,8 @@ struct MyAVLTree {
         catch(...)
         {
             std::cout << "unsuccessful" << std::endl;
+            return;
         }
-        
     }
     // Search Name
     void searchName(const std::string& name)
@@ -136,10 +231,12 @@ struct MyAVLTree {
             {
                 throw nullptr;
             }
+            return;
         }
         catch(...)
         {
             std::cout << "unsuccessful" << std::endl;
+            return;
         }
         
     }
@@ -268,6 +365,5 @@ struct MyAVLTree {
     // TODO: REMOVE IN ORDER NODE  
     MyAVLTree(std::string name, std::string id) {
         this->root = insertHelper(this->root, name, id);
-        this->height++;
     }
 };
