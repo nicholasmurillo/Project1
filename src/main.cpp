@@ -16,6 +16,9 @@ int main(){
 	std::cout << tree.root->height << std::endl;
 	std::cout << tree.root->left->height << std::endl;
 	std::cout << tree.root->right->height << std::endl;
+	tree.printLevelCount();
+	std::cout << tree.height << std::endl;
+	tree.search("00000001");
 	return 0;
 }
 

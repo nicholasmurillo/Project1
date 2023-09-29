@@ -11,14 +11,6 @@ struct TreeNode {
     std::string name;
     TreeNode* left = nullptr;
     TreeNode* right = nullptr;
-    void setRight(TreeNode* root) 
-    {
-        this->right = root;
-    }
-    void setLeft(TreeNode* root) 
-    {
-        this->left = root;
-    }
     TreeNode(std::string name, std::string id) 
     {
         this->id = id;
@@ -113,7 +105,6 @@ struct MyAVLTree {
     void remove(std::string id) 
     {
         removeHelper(this->root, id);
-        return;
     }
     // Successor Node Finder Function
     TreeNode* successorNode(TreeNode* node)
@@ -182,63 +173,82 @@ struct MyAVLTree {
         }
         return root;
     }
-    // searchID
-    void searchID(TreeNode* root, std::string id) 
+    void search(std::string idname)
     {
+        bool goodName;
+        bool goodID;
         try
         {
-            if(root == nullptr) // If root is nullptr, id is not in tree
+            if(checkID(idname))
             {
-                throw nullptr;
+                searchIDHelper(this->root, idname);
+                goodID = true;
+                return;
             }
-            if(std::stoi(id) == std::stoi(root->id))
-            {
-                std::cout << root->name << std::endl;
-            }
-            else if(std::stoi(id) < std::stoi(root->id))
-            {
-                searchID(root->left, id);
-            }
-            else
-            {
-                searchID(root->right, id);
-            }
-            return;
         }
         catch(...)
         {
-            std::cout << "unsuccessful" << std::endl;
-            return;
+            goodID = false;
         }
+        try
+        {
+            if(checkName(idname))
+            {
+                searchNameHelper(idname);
+                goodName = true;
+                return;
+            }
+        }
+        catch(...)
+        {
+            goodName = false;
+        }
+        if(!goodName && !goodID)
+        {
+            std::cout << "invalid name/id" << std::endl;
+        }
+        return;
+    }
+    // searchID
+    TreeNode* searchIDHelper(TreeNode* root, std::string id) 
+    {
+        if(root == nullptr) // If root is nullptr, id is not in tree
+        {
+            return root;
+        }
+        if(std::stoi(id) == std::stoi(root->id))
+        {
+            std::cout << root->name << std::endl;
+        }
+        else if(std::stoi(id) < std::stoi(root->id))
+        {
+            searchIDHelper(root->left, id);
+        }
+        else
+        {
+            searchIDHelper(root->right, id);
+        }
+        return root;
     }
     // Search Name
-    void searchName(const std::string& name)
+    void searchNameHelper(const std::string& name)
     {
-        try
+        bool foundName = false;
+        std::vector<TreeNode*> nodelist;
+        traversePreorder(this->root, nodelist);
+        for(int i = 0; i < nodelist.size(); i++)
         {
-            bool foundName = false;
-            std::vector<TreeNode*> nodelist;
-            traversePreorder(this->root, nodelist);
-            for(int i = 0; i < nodelist.size(); i++)
+            if(nodelist[i]->name == name)
             {
-                if(nodelist[i]->name == name)
-                {
-                    std::cout << nodelist[i]->id << std::endl;
-                    foundName = true;
-                }
+                std::cout << nodelist[i]->id << std::endl;
+                foundName = true;
             }
-            if(!foundName)
-            {
-                throw nullptr;
-            }
-            return;
         }
-        catch(...)
+        if(!foundName)
         {
             std::cout << "unsuccessful" << std::endl;
-            return;
         }
-        
+        return;   
     }
     // Print Inorder
     void printInorder()
@@ -342,27 +352,27 @@ struct MyAVLTree {
             nodelist.push_back(root);
         }
     }
-    // Print Level Count, goes through all the nodes everytime (keep a counter instead?)
+    // Print Level Count (Just height of root node of tree)
     void printLevelCount()
     {
-        this->height = getHeight(this->root);
+        this->height = this->root->height;
         std::cout << this->height << std::endl;
     }
-    // getHeight returns the height of the tree
-    int getHeight(TreeNode* root)
+    // Remove nth In order node
+    void removeInorder(int n)
     {
-        if(root == nullptr)
+        std::vector<TreeNode*> nodelist;
+        traverseInorder(this->root, nodelist);
+        try
         {
-            return 0;
+            removeHelper(nodelist[n], nodelist[n]->id);
+            std::cout << "successful" << std::endl;
         }
-        else
+        catch(...)
         {
-            int left_height = getHeight(root->left);
-            int right_height = getHeight(root->right);
-            return std::max(left_height, right_height) + 1;
+            std::cout << "unsuccessful" << std::endl;
         }
-    }
-    // TODO: REMOVE IN ORDER NODE  
+    }  
     MyAVLTree(std::string name, std::string id) {
         this->root = insertHelper(this->root, name, id);
     }

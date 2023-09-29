@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 
+// FIXME: Excess spaces handling with names, want to remove them?
 bool checkName(std::string name)
 {
     for(auto c : name) // Checking for characters a-z, A-Z, or space
