@@ -1,0 +1,9 @@
+8
+insert "Nick" 12345678
+insert "Carson Smith" 23456789
+remove 12345678
+search 12345678
+printLevelCount
+printInorder
+remove 23456789
+printLevelCount

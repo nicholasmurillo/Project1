@@ -9,7 +9,7 @@
 		g++ -std=c++14 -Werror -Wuninitialized -o build/test test-unit/test.cpp && build/test
 */
 
-std::string AVLTree(const std::string& filename)
+std::string runAVLTree(const std::string& filename)
 {
 	// Create initial AVL Tree
 	MyAVLTree tree;
@@ -24,13 +24,9 @@ std::string AVLTree(const std::string& filename)
 	// read how many lines of commands there are
 	std::string firstline;
 	std::getline(infile, firstline);
-	for(auto num : firstline)
+	if(!checkNum(firstline))
 	{
-		if(!isdigit(num))
-		{
-			std::cout << "Invalid First Line, Input a Number" << "\n";
-			return 0;
-		}
+		return "";
 	}
 	int numlines = std::stoi(firstline);
 
@@ -230,26 +226,109 @@ bool compareFiles(const std::string& filename)
 
 
 TEST_CASE("Output File #1", "[flag]"){
-	AVLTree("1.txt");
+	runAVLTree("1.txt");
 	REQUIRE(compareFiles("1.txt"));
 }
 
 TEST_CASE("Output File #2", "[flag]"){
-	AVLTree("2.txt");
+	runAVLTree("2.txt");
 	REQUIRE(compareFiles("2.txt"));
 }
 
 TEST_CASE("Output File #3", "[flag]"){
-	AVLTree("3.txt");
+	runAVLTree("3.txt");
 	REQUIRE(compareFiles("3.txt"));
 }
 
 TEST_CASE("Output File #4", "[flag]"){
-	AVLTree("4.txt");
+	runAVLTree("4.txt");
 	REQUIRE(compareFiles("4.txt"));
 }
 
 TEST_CASE("Output File #5", "[flag]"){
-	AVLTree("5.txt");
+	runAVLTree("5.txt");
 	REQUIRE(compareFiles("5.txt"));
+}
+
+TEST_CASE("Unit Test #6: Incorrect Commands", "[flag]"){
+	// 5 Incorrect Commands
+	runAVLTree("6.txt");
+	REQUIRE(compareFiles("6.txt"));
+}
+
+TEST_CASE("Unit Test #7.1: Remove Top Node of Tree", "[flag]"){
+	// 3 Edge Cases: Removing topNode of Tree
+	runAVLTree("7_removeTop.txt");
+	REQUIRE(compareFiles("7_removeTop.txt"));
+}
+
+TEST_CASE("Unit Test #7.2: Removing a Node that Does Not Exist", "[flag]"){
+	// 3 Edge Cases: Removing a Node that does not exist
+	runAVLTree("7_removeNotExist.txt");
+	REQUIRE(compareFiles("7_removeNotExist.txt"));
+}
+
+TEST_CASE("Unit Test #8.1: Right Rotation", "[flag]"){
+	runAVLTree("8_right.txt");
+	REQUIRE(compareFiles("8_right.txt"));
+}
+
+TEST_CASE("Unit Test #8.2: Left Rotation", "[flag]"){
+	runAVLTree("8_left.txt");
+	REQUIRE(compareFiles("8_right.txt"));
+}
+
+TEST_CASE("Unit Test #8.3: Right Left Rotation", "[flag]"){
+	runAVLTree("8_rightleft.txt");
+	REQUIRE(compareFiles("8_rightleft.txt"));
+}
+
+TEST_CASE("Unit Test #8.4: Left Right Rotation", "[flag]"){
+	runAVLTree("8_leftright.txt");
+	REQUIRE(compareFiles("8_leftright.txt"));
+}
+
+TEST_CASE("Unit Test #9.1: No Child Deletion", "[flag]"){
+	runAVLTree("9_nochild.txt");
+	REQUIRE(compareFiles("9_nochild.txt"));
+}
+
+TEST_CASE("Unit Test #9.2: One Child Deletion", "[flag]"){
+	runAVLTree("9_onechild.txt");
+	REQUIRE(compareFiles("9_onechild.txt"));
+}
+
+TEST_CASE("Unit Test #9.1: Two Child Deletion", "[flag]"){
+	runAVLTree("9_twochild.txt");
+	REQUIRE(compareFiles("9_twochild.txt"));
+}
+
+TEST_CASE("Unit Test #10: Insert 100 Nodes, Remove 10"){
+	// Create AVL Tree, expected and actual string vectors, and node list
+	MyAVLTree tree;
+	std::vector<int> expectedOutput, actualOutput;
+	std::vector<TreeNode*> actualNodes;
+	// Insert 100 Random Node IDs into Tree
+	for(int i = 0; i < 50; i++)
+	{
+		int randomInput = rand();
+		randomInput = (randomInput % 89999999) + 10000000;
+		if(std::count(expectedOutput.begin(), expectedOutput.end(), randomInput) == 0)
+		{
+			expectedOutput.push_back(randomInput);
+			tree.insert("Test", std::to_string(randomInput));
+		}
+	}
+	// Sort both vectors based off ID
+	std::sort(expectedOutput.begin(), expectedOutput.end());
+	tree.traverseInorder(tree.topNode, actualNodes);
+	// TODO: Remove 10 random nodes
+	for(auto node : actualNodes)
+	{
+		actualOutput.push_back(std::stoi(node->id));
+	}
+	// actualOutput should be 90 if removed 10 nodes from inital 100
+	REQUIRE(actualOutput.size() == 50);
+	// actualOutput should be the same as expectedOutput
+	REQUIRE(actualOutput == expectedOutput);
 }

@@ -1,0 +1,9 @@
+8
+insert "Nick" 12345678
+insert "Bob" 00001234
+insert "Prof" 23456789
+insert "Evan" 34567891
+remove 34567890
+remove 00000000
+remove 34567891
+printInorder

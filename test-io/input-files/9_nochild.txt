@@ -1,0 +1,6 @@
+5
+insert "Nick" 12345678
+insert "Bob" 23456789
+remove 23456789
+search 23456789
+printInorder

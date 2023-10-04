@@ -1,0 +1,8 @@
+7
+insert "Nick" 12345678
+insert "Bob" 23456789
+insert "Carson Smith" 00001234
+insert "Greg" 34567899
+remove 23456789
+search 23456789
+printPostorder

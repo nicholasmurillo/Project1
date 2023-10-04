@@ -1,0 +1,5 @@
+4
+insert "Original Root" 12345678
+insert "New Root" 23456789
+insert "Nick" 34567899
+printPostorder

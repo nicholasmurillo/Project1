@@ -140,14 +140,14 @@ struct MyAVLTree {
         {
             TreeNode* temp = searchIDHelper(this->topNode, id);
             // If temp is nullptr, below if statement does not run, prints unsuccessful
-            if(temp)
+            if(temp == nullptr)
             {
-                removeHelper(temp, id);
-                std::cout << "successful\n";
+                std::cout << "unsuccessful\n";
             }
             else
             {
-                std::cout << "unsuccessful\n";
+                removeHelper(this->topNode, id);
+                std::cout << "successful\n";
             }
         }
         else
@@ -205,7 +205,7 @@ struct MyAVLTree {
                 {
                     // Dereferenced node contents of temp copied into root
                     *root = *temp;
-                    delete temp;
+                    free(temp);
                 }
             }
             // Two Children Case
@@ -216,9 +216,11 @@ struct MyAVLTree {
                 root->name = temp->name;
                 root->right = removeHelper(root->right, temp->id);
             }
-            // If TreeNode was only one in tree, return before changing height
+            // If TreeNode was only one in tree, return and set height to 0
             if(root == nullptr)
             {
+                this->height = 0;
+                this->topNode = nullptr;
                 return root;
             }
             // Updating heights of nodes after deletion
@@ -388,7 +390,14 @@ struct MyAVLTree {
     // Print Level Count (Just height of root node of tree)
     void printLevelCount()
     {
-        this->height = this->topNode->height;
+        if(this->topNode != nullptr)
+        {
+            this->height = this->topNode->height;
+        }
+        else
+        {
+            this->height = 0;
+        }
         std::cout << this->height << "\n";
     }
     // Remove nth In order node
@@ -427,6 +436,6 @@ struct MyAVLTree {
         this->topNode = nullptr;
         this->height = 0;
         for(auto tempNode : templist)
-            delete tempNode;
+            free(tempNode);
     }
 };

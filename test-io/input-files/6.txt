@@ -1,0 +1,7 @@
+6
+insert "A11y" 45679999
+insert "Nick Sandman" 12341234123412341234
+insert "Prof Man" XO444444
+insert "Bob Fish" 007
+insert "Matt*" 12345678
+printLevelCount
