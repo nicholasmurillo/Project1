@@ -22,6 +22,7 @@ struct MyAVLTree {
     int height = 0;
     TreeNode* topNode = nullptr;
     // Balance Factor Function
+    // TODO: Find source for rotations
     int balFactor(TreeNode* root)
     {
         if(root == nullptr)
@@ -70,11 +71,11 @@ struct MyAVLTree {
     {
         if(!checkName(name) or !checkID(id)) // Checking if name and id are valid
             {
-                std::cout << "unsuccessful" << std::endl;
+                std::cout << "unsuccessful\n";
                 return;
             }
         insertHelper(this->topNode, name, id);
-        std::cout << "successful" << std::endl;
+        std::cout << "successful\n";
     }
     // Insert Helper Function, recursively called
     TreeNode* insertHelper(TreeNode* root, std::string name, std::string id) 
@@ -101,10 +102,12 @@ struct MyAVLTree {
             return root;
         }
         // Updating heights after insertion
+        // Source: In class review from professor (from slides in class)
         root->height = 1 + std::max(root->left ? root->left->height : 0, root->right ? root->right->height : 0);
         // After updating heights, check all balance factors of affected nodes
         int balFac = balFactor(root);
         // Balancing Subtrees After Insertion
+        // TODO: Find source for balance cases
         // Left Left Case
         if(balFac > 1 && std::stoi(id) < std::stoi(root->left->id))
         {
@@ -140,16 +143,16 @@ struct MyAVLTree {
             if(temp)
             {
                 removeHelper(temp, id);
-                std::cout << "successful" << std::endl;
+                std::cout << "successful\n";
             }
             else
             {
-                std::cout << "unsuccessful" << std::endl;
+                std::cout << "unsuccessful\n";
             }
         }
         else
         {
-            std::cout << "unsuccessful" << std::endl;
+            std::cout << "unsuccessful\n";
         }
     }
     // Successor Node Finder Function
@@ -171,7 +174,7 @@ struct MyAVLTree {
         // If root is nullptr, id is not in tree
         if(root == nullptr)
         {
-            std::cout << "unsuccessful" << std::endl;
+            std::cout << "unsuccessful\n";
             return root;
         }
         // Id is less than root id, recurse through left node
@@ -187,6 +190,7 @@ struct MyAVLTree {
         else
         {
             // No children or one child case
+            // TODO: Find source for deletion of AVL Tree
             if(root->left == nullptr or root->right == nullptr)
             {
                 TreeNode* temp = root->left ? root->left : root->right;
@@ -231,16 +235,16 @@ struct MyAVLTree {
             // If temp is nullptr, below if statement does not run, prints unsuccessful
             if(temp)
             {
-                std::cout << temp->name << std::endl;
+                std::cout << temp->name << "\n";
             }
             else
             {
-                std::cout << "unsuccessful" << std::endl;
+                std::cout << "unsuccessful\n";
             }
         }
         else
         {
-            std::cout << "unsuccessful" << std::endl;
+            std::cout << "unsuccessful\n";
         }
     }
     // searchIDHelper
@@ -265,17 +269,17 @@ struct MyAVLTree {
         bool foundName = false;
         std::vector<TreeNode*> nodelist;
         traversePreorder(this->topNode, nodelist);
-        for(int i = 0; i < nodelist.size(); i++)
+        for(int i = 0; i < (int)(nodelist.size()); i++)
         {
             if(nodelist[i]->name == name)
             {
-                std::cout << nodelist[i]->id << std::endl;
+                std::cout << nodelist[i]->id << "\n";
                 foundName = true;
             }
         }
         if(!foundName)
         {
-            std::cout << "unsuccessful" << std::endl;
+            std::cout << "unsuccessful\n";
         }
         return;   
     }
@@ -286,21 +290,21 @@ struct MyAVLTree {
         {
             std::vector<TreeNode*> nodelist;
             traverseInorder(this->topNode, nodelist);
-            for(int i = 0; i < nodelist.size(); i++)
+            for(int i = 0; i < (int)(nodelist.size()); i++)
             {
-                if(i == nodelist.size() - 1)
+                if(i == (int)(nodelist.size() - 1))
                 {
-                    std::cout << nodelist[i]->name << std::endl;
+                    std::cout << nodelist[i]->name << "\n";
                 }
                 else
                 {
-                    std::cout << nodelist[i]->name << ",";
+                    std::cout << nodelist[i]->name << ", ";
                 }
             }
         }
         catch(...)
         {
-            std::cout << "unsuccessful printInorder" << std::endl;
+            std::cout << "unsuccessful printInorder\n";
         }
     }
     // Inorder Traversal (Helper function for printInorder)
@@ -320,21 +324,21 @@ struct MyAVLTree {
         {
             std::vector<TreeNode*> nodelist;
             traversePreorder(this->topNode, nodelist);
-            for(int i = 0; i < nodelist.size(); i++)
+            for(int i = 0; i < (int)(nodelist.size()); i++)
             {
-                if(i == nodelist.size() - 1)
+                if(i == (int)(nodelist.size() - 1))
                 {
-                    std::cout << nodelist[i]->name << std::endl;
+                    std::cout << nodelist[i]->name << "\n";
                 } 
                 else
                 {
-                    std::cout << nodelist[i]->name << ",";
+                    std::cout << nodelist[i]->name << ", ";
                 }
             }
         }
         catch(...)
         {
-            std::cout << "unsuccessful printpreorder" << std::endl;
+            std::cout << "unsuccessful printpreorder\n";
         }
     }
     // Preorder Traversal (Helper function for printPreorder)
@@ -354,21 +358,21 @@ struct MyAVLTree {
         {
             std::vector<TreeNode*> nodelist;
             traversePostorder(this->topNode, nodelist);
-            for(int i = 0; i < nodelist.size(); i++)
+            for(int i = 0; i < (int)(nodelist.size()); i++)
             {
-                if(i == nodelist.size() - 1)
+                if(i == (int)(nodelist.size() - 1))
                 {
-                    std::cout << nodelist[i]->name << std::endl;
+                    std::cout << nodelist[i]->name << "\n";
                 }
                 else
                 {
-                    std::cout << nodelist[i]->name << ",";
+                    std::cout << nodelist[i]->name << ", ";
                 }
             }
         }
         catch(...)
         {
-            std::cout << "unsuccessful printPostorder" << std::endl;
+            std::cout << "unsuccessful printPostorder\n";
         }
     }
     // Postorder Traversal (Helper function for printPostorder)
@@ -385,21 +389,21 @@ struct MyAVLTree {
     void printLevelCount()
     {
         this->height = this->topNode->height;
-        std::cout << this->height << std::endl;
+        std::cout << this->height << "\n";
     }
     // Remove nth In order node
     void removeInorder(int n)
     {
         std::vector<TreeNode*> nodelist;
         traverseInorder(this->topNode, nodelist);
-        if(n < nodelist.size())
+        if(n < (int)(nodelist.size()))
         {
-            removeHelper(nodelist[n], nodelist[n]->id);
-            std::cout << "successful" << std::endl;
+            removeHelper(this->topNode, nodelist[n]->id);
+            std::cout << "successful\n";
         }
         else
         {
-            std::cout << "unsuccessful" << std::endl;
+            std::cout << "unsuccessful\n";
         }
     }  
     MyAVLTree() {}
@@ -409,11 +413,11 @@ struct MyAVLTree {
         {
             this->topNode = insertHelper(this->topNode, name, id);
             this->height++;
-            std::cout << "successful" << std::endl;
+            std::cout << "successful\n";
         }
         else
         {
-            std::cout << "unsuccessful" << std::endl;
+            std::cout << "unsuccessful\n";
         }
     }
     ~MyAVLTree()

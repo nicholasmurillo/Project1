@@ -7,10 +7,15 @@
 	1. You will have to comment main() when unit testing your code because catch uses its own main().
 	2. You will submit this main.cpp file and any header files you have on Gradescope. 
 */
-
-int main(){
+std::string AVLTree()
+{
 	// Create initial AVL Tree
 	MyAVLTree tree;
+	// Catch2 Test output stream
+	// Code from stackoverflow: https://stackoverflow.com/questions/4191089/how-to-unit-test-function-writing-to-stdout-stdcout
+	std::ostringstream oss;
+	std::streambuf* p_cout_streambuf = std::cout.rdbuf();
+	std::cout.rdbuf(oss.rdbuf());
 	// read how many lines of commands there are
 	std::string firstline;
 	std::getline(std::cin, firstline);
@@ -51,7 +56,7 @@ int main(){
 				// Getting whatever is in quotes
 				std::getline(in, name, '\"');
 				std::getline(in, name, '\"');
-				if(!checkName)
+				if(!checkName(name))
 				{
 					std::cout << "unsuccessful" << std::endl;
 					break;
@@ -155,7 +160,13 @@ int main(){
 				break;
 		}
 	}
-
-	return 0;
+	// Restore oss
+	std::cout.rdbuf(p_cout_streambuf);
+	return oss.str();
 }
 
+int main(){
+	std::string output = AVLTree();
+	std::cout << output;
+	return 0;
+}

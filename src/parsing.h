@@ -1,6 +1,9 @@
 #include <iostream>
 #include <sstream>
+#include <fstream>
 #include <cstring>
+#include <string>
+#include <vector>
 #include <set>
 
 // TODO: Check each line for a valid command, then the following depending on the command
@@ -12,7 +15,7 @@ bool checkLine(std::string line)
 int checkCommand(const std::string& command)
 {
     std::vector<std::string> goodCommands = {"insert", "remove", "search", "printInorder", "printPreorder", "printPostorder", "printLevelCount", "removeInorder"};
-    for(int i = 0; i < goodCommands.size(); i++)
+    for(int i = 0; i < (int)(goodCommands.size()); i++)
     {
         if(command == goodCommands[i])
         {
