@@ -268,6 +268,12 @@ TEST_CASE("Unit Test #7.2: Removing a Node that Does Not Exist", "[flag]"){
 	REQUIRE(compareFiles("7_removeNotExist.txt"));
 }
 
+TEST_CASE("Unit Test #7.3: Multiple of Same Name", "[flag]"){
+	// 3 Edge Cases: Printing IDs of people with same name
+	runAVLTree("7_sameName.txt");
+	REQUIRE(compareFiles("7_sameName.txt"));
+}
+
 TEST_CASE("Unit Test #8.1: Right Rotation", "[flag]"){
 	runAVLTree("8_right.txt");
 	REQUIRE(compareFiles("8_right.txt"));
@@ -309,7 +315,7 @@ TEST_CASE("Unit Test #10: Insert 100 Nodes, Remove 10"){
 	std::vector<int> expectedOutput, actualOutput;
 	std::vector<TreeNode*> actualNodes;
 	// Insert 100 Random Node IDs into Tree
-	for(int i = 0; i < 50; i++)
+	for(int i = 0; i < 100; i++)
 	{
 		int randomInput = rand();
 		randomInput = (randomInput % 89999999) + 10000000;
@@ -322,13 +328,22 @@ TEST_CASE("Unit Test #10: Insert 100 Nodes, Remove 10"){
 	// Sort both vectors based off ID
 	std::sort(expectedOutput.begin(), expectedOutput.end());
 	tree.traverseInorder(tree.topNode, actualNodes);
-	// TODO: Remove 10 random nodes
+	// Remove 10 random nodes
+	for(int i = 0; i < 10; i++)
+	{
+		int randomIndex = rand() % actualNodes.size();
+		tree.remove(actualNodes[randomIndex]->id);
+		expectedOutput.erase(expectedOutput.begin() + randomIndex);
+		actualNodes.erase(actualNodes.begin() + randomIndex);
+	}
+	actualNodes.clear();
+	tree.traverseInorder(tree.topNode, actualNodes);
 	for(auto node : actualNodes)
 	{
 		actualOutput.push_back(std::stoi(node->id));
 	}
 	// actualOutput should be 90 if removed 10 nodes from inital 100
-	REQUIRE(actualOutput.size() == 50);
+	REQUIRE(actualOutput.size() == 90);
 	// actualOutput should be the same as expectedOutput
 	REQUIRE(actualOutput == expectedOutput);
 }

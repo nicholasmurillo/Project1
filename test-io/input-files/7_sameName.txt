@@ -1,0 +1,13 @@
+11
+insert "Carson Smith" 12345678
+insert "Carson Smith" 00001234
+insert "Prof" 12341234
+insert "John" 00000008
+insert "Nick" 23456789
+insert "Carson Smith" 00000001
+insert "Carson Smith" 45671234
+search "Carson Smith"
+printPreorder
+remove 00001234
+printPreorder
+search "Carson Smith"

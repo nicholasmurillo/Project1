@@ -139,6 +139,14 @@ struct MyAVLTree {
         if(checkID(id))
         {
             TreeNode* temp = searchIDHelper(this->topNode, id);
+            // Checking to see if node is only one in tree, set topNode to nullptr and height to 0
+            if(this->topNode->id == id && this->topNode->left == nullptr && this->topNode->right == nullptr)
+            {
+                std::cout << "successful\n";
+                this->topNode = nullptr;
+                this->height = 0;
+                return;
+            }
             // If temp is nullptr, below if statement does not run, prints unsuccessful
             if(temp == nullptr)
             {
@@ -219,8 +227,6 @@ struct MyAVLTree {
             // If TreeNode was only one in tree, return and set height to 0
             if(root == nullptr)
             {
-                this->height = 0;
-                this->topNode = nullptr;
                 return root;
             }
             // Updating heights of nodes after deletion
